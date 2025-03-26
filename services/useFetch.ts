@@ -34,3 +34,4 @@ const useFetch = <T>(fecthFuntion: () => Promise<T>, autoFetch = true) => {
 }
 
 export default useFetch
+
