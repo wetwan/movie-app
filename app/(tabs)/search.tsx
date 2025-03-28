@@ -3,6 +3,7 @@ import Searchbar from "@/components/Searchbar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { FetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/Appwrite";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -21,6 +22,8 @@ const Search = () => {
   } = useFetch(() => FetchMovies({ query: searchQuery }), false);
 
   useEffect(() => {
+    console.log("Search Query:", searchQuery);
+
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
         await refetch();
@@ -30,6 +33,12 @@ const Search = () => {
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  useEffect(() => {
+    if (movies?.length > 0 && movies?.[0]) {
+      updateSearchCount(searchQuery, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
